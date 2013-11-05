@@ -13,6 +13,7 @@
 
 #include <sys/proc.h> /* process include */
 #include <sys/pcpu.h> /* included by <sys/proc.h> if _KERNEL not defined */
+#include <sys/cpuset.h>
 #include </sys/vm/vm_phys.h>
 #include <machine/vmparam.h>
 #include <malloc.h> /* Modified version of malloc */
@@ -22,10 +23,14 @@
 
 
 /* ------- SYSCALL INTERFACE ------ */
-//Gets the memory affinity of a designated CPU
-struct mem_affinity* get_memory_affinity (struct pcpu cpu);
-//Sets the memory affinity of a designated CPU
-void set_memory_affinity (struct pcpu cpu, int domain);
+//Retrieves the memory affinity from the object specified by level, which and id
+// and returns it as a mask stored in the space provided by mask
+int cpuset_get_memory_affinity (cpulevel_t level,cpuwhich_t which,id_t id,size_t
+setsize, cpuset_t *mask);
+//Sets the memory affinity of the object specified by level,which and id to
+// the value stored in mask
+int cpuset_set_memory_affinity (cpulevel_t level,cpuwhich_t which,id_t id,size_t
+setsize, cpuset_t *mask);
 // Moves specified pages on specified nodes to new memory nodes.
 int move_pages ();
 // Attempts to move all pages of a process in specified nodes to specified new memory nodes.
