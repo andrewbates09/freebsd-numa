@@ -1,11 +1,11 @@
 #ifndef __FREE_BSD_NUMA_H__
 #define __FREE_BSD_NUMA_H__
 
-/*	Notes:
- * 	Only including header files found in the dir /stable/10/sys/amd64/include/vmparam.h in the FreeBSD SVN repository.
- *	Since our stakeholders are using Sandy Bridge E5-2620 which use the 64 bit instruction set, we will use amd64 headers for now.
- *	FreeBSD notation seems to be <machine/*.h>. Its probably pointing at an environment variable 'machine' to get to the correct machine directory.
- *	http://svnweb.freebsd.org/base/stable/10/
+/*  Notes:
+ *  Only including header files found in the dir /stable/10/sys/amd64/include/vmparam.h in the FreeBSD SVN repository.
+ *  Since our stakeholders are using Sandy Bridge E5-2620 which use the 64 bit instruction set, we will use amd64 headers for now.
+ *  FreeBSD notation seems to be <machine/*.h>. Its probably pointing at an environment variable 'machine' to get to the correct machine directory.
+ *  http://svnweb.freebsd.org/base/stable/10/
  */
 
 /* -------------------------------- */
