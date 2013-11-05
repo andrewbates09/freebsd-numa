@@ -13,6 +13,7 @@
 
 #include <sys/proc.h> /* process include */
 #include <sys/pcpu.h> /* included by <sys/proc.h> if _KERNEL not defined */
+#include <sys/cpuset.h>
 #include </sys/vm/vm_phys.h>
 #include <machine/vmparam.h>
 #include <malloc.h> /* Modified version of malloc */
@@ -22,9 +23,14 @@
 
 
 /* ------- SYSCALL INTERFACE ------ */
-
-struct mem_affinity* get_memory_affinity (struct pcpu cpu);
-void set_memory_affinity (struct pcpu cpu, int domain);
+//Retrieves the memory affinity from the object specified by level, which and id
+// and returns it as a mask stored in the space provided by mask
+int cpuset_get_memory_affinity (cpulevel_t level,cpuwhich_t which,id_t id,size_t
+setsize, cpuset_t *mask);
+//Sets the memory affinity of the object specified by level,which and id to
+// the value stored in mask
+int cpuset_set_memory_affinity (cpulevel_t level,cpuwhich_t which,id_t id,size_t
+setsize, cpuset_t *mask);
 // Moves specified pages on specified nodes to new memory nodes.
 int move_pages ();
 // Attempts to move all pages of a process in specified nodes to specified new memory nodes.
@@ -35,10 +41,15 @@ int migrate_pages ();
 // If this returns true, the current machine is has NUMA architecture, and the following functions should be avaialable.
 // If this returns false, the current machine does not have NUMA architecture, and should not be allowed to use the following functions.
 int is_numa_available();
-struct proc get_current_proc (struct thread td);
+//Returns an int representing the id of the CPU that the specified thread is
+//running on
+int get_current_cpu (int pid);
+//Gets the CPUs in the numa domain specified by the integer domain id.
 struct pcpu get_cpus_in_domain (int domain);
+//Gets the current domain of the calling thread
 int get_current_domain (struct mem_affinity affin);
-int set_thread_on_domain (struct thread td, int domain);
+//Sets the domain of the designated thread specified by pid to the specified numa domain
+int set_thread_on_domain (int pid, int domain);
 // Migrates the memory pages that are NOT located on a thread's assinged NUMA node to its current assigned NUMA node.
 int migrate_estranged_pages ();
 
