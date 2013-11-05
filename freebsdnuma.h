@@ -8,9 +8,8 @@
  *  http://svnweb.freebsd.org/base/stable/10/
  */
 
-/* -------------------------------- */
+
 /* ----------- INCLUDES ----------- */
-/* -------------------------------- */
 
 #include <sys/proc.h> /* process include */
 #include <sys/pcpu.h> /* included by <sys/proc.h> if _KERNEL not defined */
@@ -18,9 +17,9 @@
 #include <machine/vmparam.h>
 #include <malloc.h> /* Modified version of malloc */
 
-/* -------------------------------- */
+
 /* ---------- DEFINITIONS --------- */
-/* -------------------------------- */
+
 
 /* ------- SYSCALL INTERFACE ------ */
 
