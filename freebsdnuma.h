@@ -22,8 +22,9 @@
 
 
 /* ------- SYSCALL INTERFACE ------ */
-
+//Gets the memory affinity of a designated CPU
 struct mem_affinity* get_memory_affinity (struct pcpu cpu);
+//Sets the memory affinity of a designated CPU
 void set_memory_affinity (struct pcpu cpu, int domain);
 // Moves specified pages on specified nodes to new memory nodes.
 int move_pages ();
@@ -35,10 +36,15 @@ int migrate_pages ();
 // If this returns true, the current machine is has NUMA architecture, and the following functions should be avaialable.
 // If this returns false, the current machine does not have NUMA architecture, and should not be allowed to use the following functions.
 int is_numa_available();
-struct proc get_current_proc (struct thread td);
+//Returns an int representing the id of the CPU that the specified thread is
+//running on
+int get_current_cpu (int pid);
+//Gets the CPUs in the numa domain specified by the integer domain id.
 struct pcpu get_cpus_in_domain (int domain);
+//Gets the current domain of the calling thread
 int get_current_domain (struct mem_affinity affin);
-int set_thread_on_domain (struct thread td, int domain);
+//Sets the domain of the designated thread specified by pid to the specified numa domain
+int set_thread_on_domain (int pid, int domain);
 // Migrates the memory pages that are NOT located on a thread's assinged NUMA node to its current assigned NUMA node.
 int migrate_estranged_pages ();
 
