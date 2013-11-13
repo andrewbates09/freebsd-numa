@@ -31,7 +31,9 @@
 
 
 /* ---------- DEFINITIONS --------- */
-
+#define NUMA_NEAREST
+#define NUMA_INTERLEAVE
+typedef int numa_policy
 
 /* ------- SYSCALL INTERFACE ------ */
 
@@ -43,14 +45,16 @@ int cpuset_get_memory_affinity(cpulevel_t level,
                                cpuwhich_t which,
                                id_t id,
                                size_t setsize,
-                               cpuset_t *mask);
+                               cpuset_t *mask,
+							   numa_policy *policy);
 
 /* Sets the memory affinity of the object specified by level,which and id to the value stored in mask */
 int cpuset_set_memory_affinity(cpulevel_t level,
                                cpuwhich_t which,
                                id_t id,
                                size_t setsize,
-                               cpuset_t *mask);
+                               cpuset_t *mask,
+							   numa_policy *policy);
 
 /* Moves specified pages on specified nodes to new memory nodes. */
 long move_pages(int pid,
@@ -65,37 +69,5 @@ int migrate_pages(int pid,
                   unsigned long maxnodesm,
                   const unsigned long *old_nodes,
                   const unsigned long *new_nodes);
-
-
-/* ------- USERSPACE LIBRARY ------ */
-
-
-/* If this returns true, the current machine is has NUMA architecture, and the following 
- * functions should be available.  If this returns false, the current machine does not have
- * NUMA architecture, and should not be allowed to use the following functions.
- */
-int is_numa_available();
-
-/* Returns an int representing the id of the CPU that the specified thread is running on */
-int get_current_cpu(int pid);
-
-/* Retrieves process */
-struct proc get_current_proc(struct thread td);
-
-/* Gets the CPUs in the numa domain specified by the integer domain id. */
-struct pcpu get_cpus_in_domain(int domain);
-
-/* Gets the current domain of the calling thread */
-int get_current_domain(struct mem_affinity affin);
-
-/* Sets the domain of the designated thread specified by pid to the specified numa domain */
-int set_thread_on_domain(struct thread td,
-                         int domain);
-
-/* Migrates the memory pages that are NOT located on a thread's assinged NUMA node to its
- * current assigned NUMA node.
- */
-int migrate_estranged_pages ();
-
 
 #endif /* __FREE_BSD_NUMA_H__ */
