@@ -27,13 +27,14 @@
 #include <sys/cpuset.h>
 #include </sys/vm/vm_phys.h>
 #include <machine/vmparam.h>
-#include <stdlib.h>
-#include <jemalloc/jemalloc.h>  /* Modified version of malloc | #include <malloc.h> */
+#include <malloc.h>             /* Modified version of malloc */
+
 
 /* ---------- DEFINITIONS --------- */
 #define NUMA_NEAREST
 #define NUMA_INTERLEAVE
 typedef int numa_policy;
+
 
 /* ------- SYSCALL INTERFACE ------ */
 
@@ -69,5 +70,6 @@ int migrate_pages(int pid,
                   unsigned long maxnodesm,
                   const unsigned long *old_nodes,
                   const unsigned long *new_nodes);
+
 
 #endif /* __FREE_BSD_NUMA_H__ */
