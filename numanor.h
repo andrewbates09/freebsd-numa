@@ -42,13 +42,15 @@ int set_thread_on_domain(struct thread td,
                          int domain);
 
 /* Set specific memory policy to thread (default action is nearest first touch) */
-int set_memory_policy();
+int set_memory_policy(struct thread td);
 
 /* Move thread to NUMA node and leave associated memory pages estranged */
-int move_thread();
+int move_thread(struct thread td
+                int domain);
 
 /* Migrates thread to NUMA node and all the memory pages associated to it */
-int migrate_thread();
+int migrate_thread(struct thread td
+                   int domain);
 
 
 #endif /* __NUMANOR_H__ */
