@@ -31,7 +31,9 @@
 #include <jemalloc/jemalloc.h>  /* Modified version of malloc | #include <malloc.h> */
 
 /* ---------- DEFINITIONS --------- */
-
+#define NUMA_NEAREST
+#define NUMA_INTERLEAVE
+typedef int numa_policy;
 
 /* ------- SYSCALL INTERFACE ------ */
 
@@ -43,14 +45,16 @@ int cpuset_get_memory_affinity(cpulevel_t level,
                                cpuwhich_t which,
                                id_t id,
                                size_t setsize,
-                               cpuset_t *mask);
+                               cpuset_t *mask,
+                               numa_policy *policy);
 
 /* Sets the memory affinity of the object specified by level,which and id to the value stored in mask */
 int cpuset_set_memory_affinity(cpulevel_t level,
                                cpuwhich_t which,
                                id_t id,
                                size_t setsize,
-                               cpuset_t *mask);
+                               cpuset_t *mask,
+                               numa_policy *policy);
 
 /* Moves specified pages on specified nodes to new memory nodes. */
 long move_pages(int pid,
@@ -65,6 +69,5 @@ int migrate_pages(int pid,
                   unsigned long maxnodesm,
                   const unsigned long *old_nodes,
                   const unsigned long *new_nodes);
-
 
 #endif /* __FREE_BSD_NUMA_H__ */
