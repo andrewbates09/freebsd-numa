@@ -34,6 +34,10 @@
 #define NUMA_NEAREST
 #define NUMA_INTERLEAVE
 typedef int numa_policy;
+<<<<<<< HEAD
+=======
+
+>>>>>>> andrewbates09
 
 /* ------- SYSCALL INTERFACE ------ */
 
