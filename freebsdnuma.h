@@ -35,6 +35,13 @@
 #define NUMA_INTERLEAVE
 typedef int numa_policy
 
+struct numa_node_info
+{
+    int node_id;
+    long node_cpu_bitmask;
+    char gap[128];
+};
+
 /* ------- SYSCALL INTERFACE ------ */
 
 
@@ -66,8 +73,12 @@ long move_pages(int pid,
 
 /* Attempts to move all pages of a process in specified nodes to specified new memory nodes. */
 int migrate_pages(int pid,
-                  unsigned long maxnodesm,
+                  unsigned long maxnode,
                   const unsigned long *old_nodes,
                   const unsigned long *new_nodes);
+
+
+/* get_numa_topology fills the provided buffer with numa_node_info structs and retuns a value equal to the total number of numa nodes or -1 if buff is not large enough to fit all entries */
+int get_numa_topology(char *buff, int length);
 
 #endif /* __FREE_BSD_NUMA_H__ */
