@@ -31,19 +31,16 @@
 
 
 /* ---------- DEFINITIONS --------- */
-#define NUMA_NEAREST
-#define NUMA_INTERLEAVE
+#define NUMA_POLICY_NEAREST
+#define NUMA_POLICY_INTERLEAVE
 typedef int numa_policy
 
-struct numa_node_info
-{
-    int node_id;
-    long node_cpu_bitmask;
-    char gap[128];
-};
+
+#define NUMA_TOPOLOGY_CPUS
+#define NUMA_TOPOLOGY_WEIGHT
+typedef int numa_topology_selection
 
 /* ------- SYSCALL INTERFACE ------ */
-
 
 /* Retrieves the memory affinity from the object specified by level, which 
  * and id and returns it as a mask stored in the space provided by mask
@@ -78,7 +75,12 @@ int migrate_pages(int pid,
                   const unsigned long *new_nodes);
 
 
-/* get_numa_topology fills the provided buffer with numa_node_info structs and retuns a value equal to the total number of numa nodes or -1 if buff is not large enough to fit all entries */
-int get_numa_topology(char *buff, int length);
+/* get_numa_topology fills buff with a data structure indicated by selection. There are 2 modes.
+ * NUMA_TOPOLOGY_CPUS fills buff with an array of bitmaps representing the cpus in each numa node.
+ * Indexes are numa node ids.
+ * NUMA_TOPOLOGY_WEIGHT fills buff with a 2 dimentional array. The indexes are numa node ids.
+ * Weight between two numa nodes can be found by accessing the value at buff[a][b] where a and b are
+ * numa node ids.   */
+int get_numa_topology(char *buff, int length, numa_topology_select selection );
 
 #endif /* __FREE_BSD_NUMA_H__ */
