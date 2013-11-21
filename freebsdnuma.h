@@ -33,12 +33,13 @@
 /* ---------- DEFINITIONS --------- */
 #define NUMA_POLICY_NEAREST
 #define NUMA_POLICY_INTERLEAVE
-typedef int numa_policy
+typedef int numa_policy;
 
 
 #define NUMA_TOPOLOGY_CPUS
 #define NUMA_TOPOLOGY_WEIGHT
-typedef int numa_topology_selection
+typedef int numa_topology_selection;
+
 
 /* ------- SYSCALL INTERFACE ------ */
 
@@ -50,7 +51,7 @@ int cpuset_get_memory_affinity(cpulevel_t level,
                                id_t id,
                                size_t setsize,
                                cpuset_t *mask,
-							   numa_policy *policy);
+                               numa_policy *policy);
 
 /* Sets the memory affinity of the object specified by level,which and id to the value stored in mask */
 int cpuset_set_memory_affinity(cpulevel_t level,
@@ -58,7 +59,7 @@ int cpuset_set_memory_affinity(cpulevel_t level,
                                id_t id,
                                size_t setsize,
                                cpuset_t *mask,
-							   numa_policy *policy);
+                               numa_policy *policy);
 
 /* Moves specified pages on specified nodes to new memory nodes. */
 long move_pages(int pid,
@@ -74,13 +75,16 @@ int migrate_pages(int pid,
                   const unsigned long *old_nodes,
                   const unsigned long *new_nodes);
 
-
 /* get_numa_topology fills buff with a data structure indicated by selection. There are 2 modes.
  * NUMA_TOPOLOGY_CPUS fills buff with an array of bitmaps representing the cpus in each numa node.
  * Indexes are numa node ids.
  * NUMA_TOPOLOGY_WEIGHT fills buff with a 2 dimentional array. The indexes are numa node ids.
  * Weight between two numa nodes can be found by accessing the value at buff[a][b] where a and b are
- * numa node ids.   */
-int get_numa_topology(char *buff, int length, numa_topology_select selection );
+ * numa node ids.
+ */
+int get_numa_topology(char *buff,
+                      int length,
+                      numa_topology_selection selection );
+
 
 #endif /* __FREE_BSD_NUMA_H__ */
