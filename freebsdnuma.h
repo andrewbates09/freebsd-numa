@@ -33,18 +33,11 @@
 
 /* ---------- DEFINITIONS --------- */
 
-#define NUMA_POLICY_NEAREST
-#define NUMA_POLICY_INTERLEAVE
-
-#define NUMA_TOPOLOGY_CPUS
-#define NUMA_TOPOLOGY_WEIGHT
-
-
-/* --------- ENUMERATIONS --------- */
-
-typedef int numa_policy;
-typedef int numa_topology_selection;
-
+enum numa_policy_t
+{
+    NUMA_POLICY_NEAREST,
+    NUMA_POLICY_INTERLEAVE
+};
 
 /* ------- SYSCALL INTERFACE ------ */
 
@@ -84,16 +77,15 @@ int migrate_pages(int pid,
                   const unsigned long *old_nodes,
                   const unsigned long *new_nodes);
 
-/* get_numa_topology fills buff with a data structure indicated by selection.
- * There are 2 modes. NUMA_TOPOLOGY_CPUS fills buff with an array of bitmaps
- * representing the cpus in each NUMA node.  Indexes are NUMA node IDs.
- * NUMA_TOPOLOGY_WEIGHT fills buff with a 2 dimensional array. The indexes are
- * NUMA node IDs. Weight between two NUMA nodes can be found by accessing the
- * value at buff[a][b] where a and b are NUMA node IDs.
+/* get_numa_cpus() fills buff with an array of cupsets. The indexes are NUMA node IDs.
  */
-int get_numa_topology(char *buff,
-                      size_t length,
-                      numa_topology_selection selection );
+size_t get_numa_cpus(cpuset_t *buff, size_t length);
+
+/* get_numa_weights() fills buff with a 2 dimensional array. The indexes are NUMA node
+ * IDs. Weight between two NUMA nodes can be found by accessing the value at buff[a][b]
+ * where a and b are NUMA node IDs.
+ */
+size_t get_numa_weights(short *buff, size_t length);
 
 
 #endif /* __FREE_BSD_NUMA_H__ */
