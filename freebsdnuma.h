@@ -7,85 +7,155 @@
  * based on this information. The indicated APIs should support thread level
  * NUMA domain affinity.
  * 
- * NOTES:
- * Including header files found in dir /stable/10/sys/amd64/include/vmparam.h in 
- * the FreeBSD SVN repository. Since the currently involved stakeholders are
- * using Sandy Bridge E5-2620 which use the 64 bit instruction set, we will use
- * amd64 headers for now. FreeBSD notation seems to be <machine/*.h>. Its
- * probably pointing at an environment variable 'machine' to get to the correct
- * machine directory. http://svnweb.freebsd.org/base/stable/10/
+ * Last Edited: December 03, 2013
  */
 
 
-#ifndef __FREE_BSD_NUMA_H__
-#define __FREE_BSD_NUMA_H__
+#ifndef __FREEBSDNUMA_H__
+#define __FREEBSDNUMA_H__
 
 
 /* ----------- INCLUDES ----------- */
 
-#include <sys/proc.h>           /* process include */
-#include <sys/pcpu.h>           /* include by <sys/proc.h> if _KERNEL not def */
 #include <sys/cpuset.h>
-#include </sys/vm/vm_phys.h>
-#include <machine/vmparam.h>
-#include <malloc.h>             /* Modified version of malloc */
 
 
 /* ---------- DEFINITIONS --------- */
 
-enum numa_policy_t
-{
-    NUMA_POLICY_NEAREST,
-    NUMA_POLICY_INTERLEAVE
-};
+/* NEAREST: The kernel will default to allocating memory in the nearest
+ *      specified nodes.
+ * INTERLEAVE: The kernel will default to allocating memory evenly across 
+ *      the specified nodes.
+ * Summary: The NUMA policy tells the kernel how to allocate memory for an
+ *      object.
+ */
+#define NUMA_POLICY_NEAREST     1
+#define NUMA_POLICY_INTERLEAVE  2
+
+/* NUMA_MOVE: Move all pages not including ones shared with other processes.
+ * NUMA_MOVE_ALL: Moves all pages including ones shared with other processes.
+ * Summary: The NUMA move flag is used to specify the behaviour of move_pages().
+ */
+#define NUMA_MOVE       1
+#define NUMA_MOVE_ALL   2
+
 
 /* ------- SYSCALL INTERFACE ------ */
 
-/* Retrieves the memory affinity from the object specified by level, which 
- * and id and returns it as a mask stored in the space provided by mask
+/* Function: cpuset_get_memory_affinity()
+ * Input:
+ *      cpulevel_t level: Specifies the level for the operation (root, cpuset or
+ *          which).
+ *      cpuwhich_t which: Defines the type of object denoted by id_t (TID, PID,
+ *          IRQ, or CPUSET).
+ *      id_t id: The id of the object
+ *      size_t setsize: The size of the set.
+ *      cpuset_t *mask: specifies the address to be filled with mask of NUMA
+ *          nodes with affinity.
+ *      int *policy: Specifies the address to store the value of the NUMA memory
+ *          policy of the specified object.
+ * Output: Returns 0 for success. Returns -1 for failure.
+ * Summary:	Used to retrieve the memory affinity and allocation policy from the
+ *      object specified by level, which, and id and returns it as a cpuset
+ *      stored in the space provided by mask. Also retrieves the memory
+ *      allocation policy of the specified object and stores the value in policy
  */
 int cpuset_get_memory_affinity(cpulevel_t level,
                                cpuwhich_t which,
                                id_t id,
                                size_t setsize,
                                cpuset_t *mask,
-                               numa_policy policy);
+                               int *policy);
 
-/* Sets the memory affinity of the object specified by level,which and id to the
- * value stored in mask
+/* Function: cpuset_set_memory_affinity()
+ * Input:
+ *      cpulevel_t level: Specifies the level for the operation (root, cpuset or
+ *          which).
+ *      cpuwhich_t which: Defines the type of object defined by id_t (TID, PID,
+ *          IRQ, or CPUSET).
+ *      id_t id: The id of the object type specified by which.
+ *      size_t setsize: The size of the set.
+ *      const cpuset_t *mask: specifies the address to be filled with mask of
+ *          NUMA nodes with affinity.
+ *      int policy: Defines the NUMA memory policy of the specified object.
+ * Output: Returns 0 for success. Returns -1 for failure.
+ * Summary: Sets the memory affinity and allocation policy of the object
+ *      specified by level,which and id to the value stored in mask and policy.
  */
 int cpuset_set_memory_affinity(cpulevel_t level,
                                cpuwhich_t which,
                                id_t id,
                                size_t setsize,
-                               cpuset_t *mask,
-                               numa_policy policy);
+                               const cpuset_t *mask,
+                               int policy);
 
-/* Moves specified pages on specified nodes to new memory nodes. */
-long move_pages(int pid,
-                unsigned long count,
-                void **pages,
-                const int *node,
-                int *status,
-                int flags);
+/* Function: move_pages()
+ * Input:
+ *      int pid: Specifies the process ID of the pages to be moved. 0 refers to
+ *          the calling process.
+ *      unsigned long count: The number of pages to move. Defines the size of
+ *          the arrays pages, node, and status.
+ *      const int *node: An array of integers specifying the desired node
+ *          location for each page.
+ *      void ** pages: An array of the pages to be moved.
+ *      int * status: An array of integers giving the status of each page.
+ *      int move_flag: An integer to specify whether memory that is shared with
+ *          other processes is also to be moved (NUMA_MOVE or NUMA_MOVE_ALL).
+ * Output: Returns 0 for success.  Returns -1 for failure.
+ * Summary: Used to move specific pages on specified nodes to new NUMA nodes.
+ */
+int move_pages(int pid,
+               unsigned long count,
+               void **pages,
+               const int *node,
+               int *status,
+               int move_flag);
 
-/* Attempts to move all pages of a process in specified nodes to specified new
- * memory nodes.
+/* Function: migrate_pages()
+ * Input:
+ *      int pid: The process ID of the pages to be moved. 0 refers to the
+ *          calling process.
+ *      unsigned long maxnode: The size of the node bitmasks.
+ *      const unsigned long *old_nodes: The bitmask representing the old nodes.
+ *      const unsigned long *new_nodes: The bitmask representing the new nodes.
+ * Output: Returns 0 for success.  Returns -1 for failure.
+ * Summary: Attempts to move all pages of a process in specified nodes to
+ *      specified new NUMA nodes.
  */
 int migrate_pages(int pid,
                   unsigned long maxnode,
                   const unsigned long *old_nodes,
                   const unsigned long *new_nodes);
 
-/* get_numa_cpus() fills buff with an array of cupsets. The indexes are NUMA node IDs.
+/* Function: get_numa_cpus()
+ * Input:
+ *      cpuset_t *buff: An array to be filled with cpusets.
+ *      size_t length: The length of the array in bytes.
+ * Output: Returns the count of NUMA nodes and fills buff with an array of
+ *      cpusets. Passing a null buff and length of 0 will simply return the
+ *      count of NUMA nodes.
+ * Summary: Allows processes to know what cpus belong to each NUMA node. This is
+ *      useful in assigning memory affinity and policies. 
  */
-size_t get_numa_cpus(cpuset_t *buff, size_t length);
+size_t get_numa_cpus(cpuset_t *buff,
+                     size_t length);
 
-/* get_numa_weights() fills buff with a 2 dimensional array. The indexes are NUMA node
- * IDs. Weight between two NUMA nodes can be found by accessing the value at buff[a][b]
- * where a and b are NUMA node IDs.
+/* Function: get_numa_weights()
+ * Input:
+ *      short *buff: A 2d array to be filled with weights between nodes, where
+ *          the indexes are relative IDs.
+ *      size_t length: The length of the array in bytes.
+ * Output: Returns the count of NUMA nodes and fills buff with a 2 dimensional
+ *      array of weights between NUMA nodes. Passing a null buff and length of 0
+ *      will simply return the count of NUMA nodes.
+ * Summary: Allows processes to know about relative latency between NUMA nodes. 
+ *      Weight between two NUMA nodes can be found by accessing the value at
+ *      buff[a][b] where a and b are memory node IDs.
  */
-size_t get_numa_weights(short *buff, size_t length);
+size_t get_numa_weights(short *buff,
+                        size_t length);
 
 
 #endif /* __FREE_BSD_NUMA_H__ */
+
+
