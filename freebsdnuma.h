@@ -55,7 +55,7 @@
  *      int *policy: Specifies the address to store the value of the NUMA memory
  *          policy of the specified object.
  * Output: Returns 0 for success. Returns -1 for failure.
- * Summary:	Used to retrieve the memory affinity and allocation policy from the
+ * Summary: Used to retrieve the memory affinity and allocation policy from the
  *      object specified by level, which, and id and returns it as a cpuset
  *      stored in the space provided by mask. Also retrieves the memory
  *      allocation policy of the specified object and stores the value in policy
@@ -157,5 +157,3 @@ size_t get_numa_weights(short *buff,
 
 
 #endif /* __FREE_BSD_NUMA_H__ */
-
-
