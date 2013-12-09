@@ -156,4 +156,4 @@ size_t get_numa_weights(short *buff,
                         size_t length);
 
 
-#endif /* __FREE_BSD_NUMA_H__ */
+#endif /* __FREEBSDNUMA_H__ */
