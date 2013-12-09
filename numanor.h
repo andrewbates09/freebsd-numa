@@ -1,19 +1,13 @@
 /*
- * FreeBSD NUMA project
- * The goal of this project is to develop an interface to allow NUMA aware
- * memory allocation from the FreeBSD user-space (expose NUMA functionality).
- * This will involve implementing syscalls to access NUMA information from
- * userspace and modifying the memory allocator to make allocation decisions
- * based on this information. The indicated APIs should support thread level
- * NUMA domain affinity.
+ * FreeBSD NUMA project - userspace
  * 
- * NOTES:
- * Including header files found in dir /stable/10/sys/amd64/include/vmparam.h in 
- * the FreeBSD SVN repository. Since the currently involved stakeholders are
- * using Sandy Bridge E5-2620 which use the 64 bit instruction set, we will use
- * amd64 headers for now. FreeBSD notation seems to be <machine/*.h>. Its
- * probably pointing at an environment variable 'machine' to get to the correct
- * machine directory. http://svnweb.freebsd.org/base/stable/10/
+ * The numanor.h userspace library takes advantage of NUMA functionality exposed
+ * by the freebsdnuma.h syscalls.  In short, this abstracts the syscalls
+ * included in freebsdnuma.h and makes them more user friendly.  Users should be
+ * able to make their application NUMA-aware by using these functions.  Also
+ * included are basic functions to test NUMA.
+ * 
+ * Last Edited: December 08, 2013
  */
 
 #ifndef __NUMANOR_H__
@@ -22,38 +16,89 @@
 
 /* ----------- INCLUDES ----------- */
 
-#include <freebsdnuma.h>        /* NUMA syscalls */
+#include <sys/freebsdnuma.h>        /* NUMA syscalls */
 
 
 /* ---------- DEFINITIONS --------- */
 
+/* 
+ * numa_count: The number of distinct NUMA nodes on the system.
+ * numa_cpus: An array of cpuset structs that denotes the number of distinct
+ *      NUMA CPUs. See get_numa_cpus() in freebsdnuma.h.
+ * numa_weights: A 2 dimensional array of shorts to store weights. See
+ *      get_numa_weights() in freebsdnuma.h.
+ * Summary: The NUMA count, cpus, and weight will be set by is_numa_available()
+ *      and are available for other userspace functions.
+ */
+extern size_t numa_count;
+extern cpuset_t *numa_cpus;
+extern uint16_t *numa_weights;
 
-/* ------- USERSPACE LIBRARY ------ */
 
+/* ---------- USERSPACE LIBRARY --- */
 
-/* If this returns true, the current machine is has NUMA architecture, and the
- * following functions should be available.  If this returns false, the current
- * machine does not have NUMA architecture, and should not be allowed to use the
- * following functions.
- * NOTE: dependencies on ACPI
+/* 
+ * Function: is_numa_availiable()
+ * Input: void
+ * Output: Returns 0 if NUMA is not available, otherwise returns the number of
+ *      NUMA nodes as integer.
+ * Summary: If this function evaluates as true (1-n nodes), the current machine
+ *      is found to have NUMA architecture, and the functions included below
+ *      should be available.  If this evaluates to false (0), the current 
+ *      machine does not have NUMA architecture, and should not be allowed to
+ *      use the following functions. The integer returned is the number of NUMA
+ *      nodes available.on.
  */
 int is_numa_available(void);
 
-/* Sets the domain of the designated thread specified by pID to the specified
- * NUMA domain
+/* 
+ * Function: set_thread_on_domain()
+ * Input:
+ *     int pid: The ID of thread to set on domain.
+ *     int domain: The index of the target NUMA domain.
+ * Output: Returns 1 on success. Returns 0 on failure.
+ * Summary: Sets the domain of the designated thread specified by PID to the
+ *      specified NUMA domain.
  */
-int set_thread_on_domain(struct thread td,
+int set_thread_on_domain(int pid,
                          int domain);
 
-/* Set specific memory policy to thread (default action: nearest first touch) */
-int set_memory_policy(struct thread td);
+/* 
+ * Function: set_memory_policy()
+ * Input:
+ *     int pid: The ID of thread to set the memory policy for.
+ *     int thread_policy: Specifies the thread’s policy, defined in
+ *          freebsdnuma.h (NUMA_POLICY_NEAREST, NUMA_POLICY_INTERLEAVE)
+ * Output: Returns 1 on success. Returns 0 on failure.
+ * Summary: Set specific memory policy to thread (default action: nearest first
+ *      touch)
+ */
+int set_memory_policy(int pid,
+                      int thread_policy);
 
-/* Move thread to NUMA node and leave associated memory pages estranged */
-int move_thread(struct thread td
+/* 
+ * Function: move_thread()
+ * Input: 
+ *     int pid: The ID of thread to move.
+ *     int domain: The ID of NUMA domain to move to.
+ * Output: Returns 1 on success. Returns 0 on failure.
+ * Summary: Moves a thread to a specified NUMA node and sets memory allocation
+ *      preferences to the specified NUMA domain, leaving associated memory
+ *      pages estranged.
+ */
+int move_thread(int pid,
                 int domain);
 
-/* Migrates thread to NUMA node and all the memory pages associated to it */
-int migrate_thread(struct thread td
+/* 
+ * Function: migrate_thread()
+ * Input: 
+ *     int pid: The ID of thread to migrate.
+ *     int domain The ID of NUMA domain to migrate to. 
+ * Output: Returns 1 on success. Returns 0 on failure.
+ * Summary: Migrates thread (int pid) and all associated memory pages to the
+ *      specified NUMA domain (int domain).
+ */
+int migrate_thread(int pid,
                    int domain);
 
 
