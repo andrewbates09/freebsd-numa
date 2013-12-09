@@ -47,7 +47,7 @@ extern uint16_t *numa_weights;
  *      should be available.  If this evaluates to false (0), the current 
  *      machine does not have NUMA architecture, and should not be allowed to
  *      use the following functions. The integer returned is the number of NUMA
- *      nodes available.on.
+ *      nodes available.
  */
 int is_numa_available(void);
 
