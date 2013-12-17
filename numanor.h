@@ -34,6 +34,15 @@ extern size_t numa_count;
 extern cpuset_t *numa_cpus;
 extern uint16_t *numa_weights;
 
+/*
+ * MEM_LEAVE: When moving a thread, leaves all associated memory pages estranged
+ * MEM_MIGRATE: When moving a thread, migrates all associated memory pages to
+ *      the specified NUMA domain.
+ * Summary: The MEM flags specify the behaviour of move_thread()
+ */
+#define MEM_LEAVE       1
+#define MEM_MIGRATE     2
+
 
 /* ---------- USERSPACE LIBRARY --- */
 
@@ -81,25 +90,16 @@ int set_memory_policy(int pid,
  * Input: 
  *     int pid: The ID of thread to move.
  *     int domain: The ID of NUMA domain to move to.
+ *     int mem_flag: Specify the memory action for moving a thread (MEM_LEAVE
+ *          MEM_MIGRATE).
  * Output: Returns 1 on success. Returns 0 on failure.
  * Summary: Moves a thread to a specified NUMA node and sets memory allocation
- *      preferences to the specified NUMA domain, leaving associated memory
- *      pages estranged.
+ *      preferences to the specified NUMA domain. Memory pages are either left 
+ *      estranged or migrated, depending on policy defined by mem_flag.
  */
 int move_thread(int pid,
-                int domain);
-
-/* 
- * Function: migrate_thread()
- * Input: 
- *     int pid: The ID of thread to migrate.
- *     int domain The ID of NUMA domain to migrate to. 
- * Output: Returns 1 on success. Returns 0 on failure.
- * Summary: Migrates thread (int pid) and all associated memory pages to the
- *      specified NUMA domain (int domain).
- */
-int migrate_thread(int pid,
-                   int domain);
+                int domain,
+                int mem_flag);
 
 
 #endif /* __NUMANOR_H__ */
