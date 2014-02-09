@@ -140,6 +140,3 @@ size_t get_numa_weights(short *buff, size_t length)
 {
     return 0;
 }
-
-
-#endif /* __FREEBSDNUMA_H__ */
