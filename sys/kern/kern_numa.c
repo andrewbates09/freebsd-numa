@@ -63,6 +63,7 @@
 #include <sys/limits.h>
 #include <sys/bus.h>
 
+#include <sys/param.h>
 #include <sys/freebsdnuma.h>
 
 

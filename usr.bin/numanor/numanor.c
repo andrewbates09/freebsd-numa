@@ -41,8 +41,7 @@
 
 /* ----------- INCLUDES ----------- */
 
-#include <sys/types.h>
-
+#include <sys/param.h>
 #include <sys/freebsdnuma.h>        /* NUMA syscalls */
 
 
