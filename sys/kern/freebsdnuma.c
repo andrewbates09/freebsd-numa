@@ -41,6 +41,7 @@
 
 /* ----------- INCLUDES ----------- */
 
+#include <sys/param.h>
 #include <sys/freebsdnuma.h>
 
 
