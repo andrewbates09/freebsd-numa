@@ -40,10 +40,12 @@
  *      stored in the space provided by mask. Also retrieves the memory
  *      allocation policy of the specified object and stores the value in policy
  */
-int cpuset_get_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
-                               size_t setsize, cpuset_t *mask, int *policy)
+int
+cpuset_get_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
+    size_t setsize, cpuset_t *mask, int *policy)
 {
-    return 0;
+
+	return (0);
 }
 
 /* Function: cpuset_set_memory_affinity()
@@ -61,10 +63,12 @@ int cpuset_get_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
  * Summary: Sets the memory affinity and allocation policy of the object
  *      specified by level,which and id to the value stored in mask and policy.
  */
-int cpuset_set_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
-                               size_t setsize, const cpuset_t *mask, int policy)
+int
+cpuset_set_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
+    size_t setsize, const cpuset_t *mask, int policy)
 {
-    return 0;
+
+	return (0);
 }
 
 /* Function: move_pages()
@@ -82,14 +86,12 @@ int cpuset_set_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
  * Output: Returns 0 for success.  Returns -1 for failure.
  * Summary: Used to move specific pages on specified nodes to new NUMA nodes.
  */
-int move_pages(int pid,
-               unsigned long count,
-               void **pages,
-               const int *node,
-               int *status,
-               int move_flag)
+int
+move_pages(pid_t pid, unsigned long count, void **pages, const int *node,
+    int *status, int move_flag)
 {
-    return 0;
+
+	return (0);
 }
 
 /* Function: migrate_pages()
@@ -103,10 +105,12 @@ int move_pages(int pid,
  * Summary: Attempts to move all pages of a process in specified nodes to
  *      specified new NUMA nodes.
  */
-int migrate_pages(int pid, unsigned long maxnode,
-                 const unsigned long *old_nodes, const unsigned long *new_nodes)
+int
+migrate_pages(int pid, unsigned long maxnode, const unsigned long *old_nodes,
+    const unsigned long *new_nodes)
 {
-    return 0;
+
+	return (0);
 }
  
 /* Function: get_numa_cpus()
@@ -119,9 +123,11 @@ int migrate_pages(int pid, unsigned long maxnode,
  * Summary: Allows processes to know what cpus belong to each NUMA node. This is
  *      useful in assigning memory affinity and policies. 
  */
-size_t get_numa_cpus(cpuset_t *buff, size_t length)
+size_t
+get_numa_cpus(cpuset_t *buff, size_t length)
 {
-    return 0;
+
+	return (0);
 }
 
 /* Function: get_numa_weights()
@@ -136,7 +142,9 @@ size_t get_numa_cpus(cpuset_t *buff, size_t length)
  *      Weight between two NUMA nodes can be found by accessing the value at
  *      buff[a][b] where a and b are memory node IDs.
  */
-size_t get_numa_weights(short *buff, size_t length)
+size_t
+get_numa_weights(short *buff, size_t length)
 {
-    return 0;
+
+	return (0);
 }
