@@ -8,14 +8,19 @@
 *
 * Function: set_thread_on_domain()
 * Input:
-* int pid: The ID of thread to set on domain.
-* int domain: The index of the target NUMA domain.
-* Output: Returns 1 on success. Returns 0 on failure.
-* Summary: Sets the domain of the designated thread specified by PID to the
-* specified NUMA domain.
+*   int pid:    The ID of thread to set on domain.
+*   int domain: The index of the target NUMA domain.
+* Output:   Returns 1 on success. Returns 0 on failure.
+* Summary:  Sets the domain of the designated thread specified by PID to the
+*   specified NUMA domain.
 *
 * int set_thread_on_domain(int pid,
 *                         int domain);
+*/
+
+/* ****** SUBJECT FUNCTION DEPENDANCIES ******
+* Requires:
+*   is_numa_available()
 */
 
 #ifndef __SET_THREAD_ON_DOMAIN_TEST__
@@ -48,7 +53,9 @@ void test_set_thread_on_domain (void)
     tstod_run_test( tstod_negative_pid(), "tstod_negative_pid" );
     tstod_run_test( tstod_zero_pid(), "tstod_zero_pid" );
     tstod_run_test( tstod_init_pid(), "tstod_init_pid" );
+    tstod_run_test( tstod_init_pid(), "tstod_outofrange_pid" );
     tstod_run_test( tstod_negative_domain(), "tstod_negative_domain" );
+    tstod_run_test( tstod_negative_domain(), "tstod_outofrange_domain" );
 
     return;
 }
