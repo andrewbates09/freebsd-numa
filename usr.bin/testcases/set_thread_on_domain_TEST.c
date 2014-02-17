@@ -18,10 +18,27 @@
 *                         int domain);
 */
 
+#ifndef __SET_THREAD_ON_DOMAIN_TEST__
+#define __SET_THREAD_ON_DOMAIN_TEST__
+
 #include <stdio.h>
 #include <assert.h>
 #include "numanor.h"
 #include "set_thread_on_domain_TEST.h"
+
+#define SUCCESS 1
+#define FAILURE 0
+
+void test_set_thread_on_domain (void);
+void tstod_run_test(int result, char* testname);
+
+int tstod_valid_input (void);
+int tstod_negative_pid (void);
+int tstod_zero_pid (void);
+int tstod_init_pid (void);
+int tstod_outofrange_pid (void);
+int tstod_negative_domain (void);
+int tstod_outofrange_domain (void);
 
 //#define NDEBUG
 
@@ -175,3 +192,5 @@ int tstod_outofrange_domain (void)
         return FAILURE;
     }
 }
+
+#endif // __SET_THREAD_ON_DOMAIN_TEST__
