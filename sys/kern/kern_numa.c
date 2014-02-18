@@ -48,12 +48,12 @@ struct cpuset_get_memory_affinity_args {
 	cpuwhich_t	which;
 	id_t		id;
 	size_t		setsize;
-	cputset_t	*mask;
+	cpuset_t	*mask;
 	int		*policy;
 };
 #endif
 int 
-sys_cpuset_get_memory_affinity(struct thread *td, struct cputset_get_memory_affinity_args *uap)
+sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affinity_args *uap)
 {
     return 0;
 }
@@ -80,12 +80,12 @@ struct cpuset_set_memory_affinity_args {
 	cpuwhich_t	which;
 	id_t		id;
 	size_t		setsize;
-	cputset_t	*mask;
+	cpuset_t	*mask;
 	int		policy;
 };
 #endif
 int 
-sys_cpuset_set_memory_affinity(struct thread *td, struct cputset_set_memory_affinity_args *uap)
+sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affinity_args *uap)
 {
     return 0;
 }
