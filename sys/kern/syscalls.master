@@ -952,5 +952,25 @@
 				    int *status, int options, \
 				    struct __wrusage *wrusage, \
 				    siginfo_t *info); }
+533	AUE_NULL	NOPROTO	{ int cpuset_get_memory_affinity(cpulevel_t level, \
+				    cpuwhich_t which, id_t id, \
+				    size_t setsize, cpuset_t *mask, \
+				    int *policy); }
+534	AUE_NULL	NOPROTO	{ int cpuset_set_memory_affinity(cpulevel_t level, \
+				    cpuwhich_t which, id_t id, \
+				    size_t setsize, cpuset_t *mask, \
+				    int policy); }
+535	AUE_NULL	NOPROTO { int move_pages(int pid, unsigned long count, \
+				    void **pages, const int *node, \
+				    int *status, int move_flag); }
+536	AUE_NULL	NOPROTO { int migrate_pages(int pid, \
+				    unsigned long maxnode, \
+				    const unsigned long *old_nodes, \
+				    const unsigned long *new_nodes); }
+537	AUE_NULL	NOPROTO { size_t get_numa_cpus(cpuset_t *buff, \
+				    size_t length); }
+538	AUE_NULL	NOPROTO { size_t get_numa_weights(short *buff, \
+				    size_t length); }
+				    
 ; Please copy any additions and changes to the following compatability tables:
 ; sys/compat/freebsd32/syscalls.master
