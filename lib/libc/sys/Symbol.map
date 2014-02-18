@@ -336,6 +336,10 @@ FBSD_1.1 {
 	cpuset_setid;
 	cpuset_getaffinity;
 	cpuset_setaffinity;
+	cpuset_get_memory_affinity;
+	cpuset_set_memory_affinity;
+	get_numa_cpus;
+	get_numa_weights;
 	faccessat;
 	fchmodat;
 	fchownat;
@@ -347,9 +351,11 @@ FBSD_1.1 {
 	jail_remove;
 	linkat;
 	lpathconf;
+	migrate_pages;
 	mkdirat;
 	mkfifoat;
 	mknodat;
+	move_pages;
 	msgctl;
 	openat;
 	readlinkat;
@@ -508,8 +514,12 @@ FBSDprivate_1.0 {
 	__sys_cpuset_setid;
 	_cpuset_getaffinity;
 	__sys_cpuset_getaffinity;
+	_cpuset_get_memory_affinity;
+	__sys_cpuset_get_memory_affinity;
 	_cpuset_setaffinity;
 	__sys_cpuset_setaffinity;
+	_cpuset_set_memory_affinity;
+	__sys_cpuset_set_memory_affinity;
 	_dup;
 	__sys_dup;
 	_dup2;
@@ -633,6 +643,10 @@ FBSDprivate_1.0 {
 	__sys_gettimeofday;
 	_getuid;
 	__sys_getuid;
+	_get_numa_cpus;
+	__sys_get_numa_cpus;
+	_get_numa_weights;
+	__sys_get_numa_weights;
 	_ioctl;
 	__sys_ioctl;
 	_issetugid;
@@ -721,6 +735,8 @@ FBSDprivate_1.0 {
 	__sys_mac_syscall;
 	_madvise;
 	__sys_madvise;
+	_migrate_pages;
+	__sys_migrate_pages;
 	_mincore;
 	__sys_mincore;
 	_minherit;
@@ -745,6 +761,8 @@ FBSDprivate_1.0 {
 	__sys_modstat;
 	_mount;
 	__sys_mount;
+	_move_pages;
+	__sys_move_pages;
 	_mprotect;
 	__sys_mprotect;
 	_msgctl;
