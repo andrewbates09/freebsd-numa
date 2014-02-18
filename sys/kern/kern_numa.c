@@ -1,31 +1,3 @@
-/*-
- * Copyright (c) 2014 EMC Corporation 
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * $FreeBSD$
- */
-
 /*
  * FreeBSD NUMA project
  * The goal of this project is to develop an interface to allow NUMA aware
@@ -63,7 +35,6 @@
 #include <sys/limits.h>
 #include <sys/bus.h>
 
-#include <sys/param.h>
 #include <sys/freebsdnuma.h>
 
 
@@ -97,8 +68,13 @@
  *      stored in the space provided by mask. Also retrieves the memory
  *      allocation policy of the specified object and stores the value in policy
  */
+<<<<<<< HEAD:sys/kern/kern_numa.c
 int 
 sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affinity_args *uap)
+=======
+int cpuset_get_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
+                               size_t setsize, cpuset_t *mask, int *policy)
+>>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
@@ -118,8 +94,13 @@ sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affin
  * Summary: Sets the memory affinity and allocation policy of the object
  *      specified by level,which and id to the value stored in mask and policy.
  */
+<<<<<<< HEAD:sys/kern/kern_numa.c
 int 
 sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affinity_args *uap)
+=======
+int cpuset_set_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
+                               size_t setsize, const cpuset_t *mask, int policy)
+>>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
@@ -140,8 +121,17 @@ sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affin
  * Output: Returns 0 for success.  Returns -1 for failure.
  * Summary: Used to move specific pages on specified nodes to new NUMA nodes.
  */
+<<<<<<< HEAD:sys/kern/kern_numa.c
 int 
 sys_move_pages(struct thread *td, struct move_pages_args *uap)
+=======
+int move_pages(int pid,
+               unsigned long count,
+               void **pages,
+               const int *node,
+               int *status,
+               int move_flag)
+>>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
@@ -157,8 +147,13 @@ sys_move_pages(struct thread *td, struct move_pages_args *uap)
  * Summary: Attempts to move all pages of a process in specified nodes to
  *      specified new NUMA nodes.
  */
+<<<<<<< HEAD:sys/kern/kern_numa.c
 int
 sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap)
+=======
+int migrate_pages(int pid, unsigned long maxnode,
+                 const unsigned long *old_nodes, const unsigned long *new_nodes)
+>>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
@@ -173,8 +168,12 @@ sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap)
  * Summary: Allows processes to know what cpus belong to each NUMA node. This is
  *      useful in assigning memory affinity and policies. 
  */
+<<<<<<< HEAD:sys/kern/kern_numa.c
 int 
 sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap)
+=======
+size_t get_numa_cpus(cpuset_t *buff, size_t length)
+>>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
@@ -191,8 +190,12 @@ sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap)
  *      Weight between two NUMA nodes can be found by accessing the value at
  *      buff[a][b] where a and b are memory node IDs.
  */
+<<<<<<< HEAD:sys/kern/kern_numa.c
 int
 sys_get_numa_weights(struct thread *td, struct get_numa_weights_args *uap)
+=======
+size_t get_numa_weights(short *buff, size_t length)
+>>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
