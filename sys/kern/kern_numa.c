@@ -14,7 +14,9 @@
 /* ----------- INCLUDES ----------- */
 
 #include <sys/freebsdnuma.h>
-
+#include <sys/param.h>
+#include <sys/systm.h>
+#include <sys/sysproto.h>
 
 /* ---------- DEFINITIONS --------- */
 
@@ -51,7 +53,7 @@ struct cpuset_get_memory_affinity_args {
 };
 #endif
 int 
-cpuset_get_memory_affinity(struct cputset_get_memory_affinity_args *uap)
+sys_cpuset_get_memory_affinity(struct thread *td, struct cputset_get_memory_affinity_args *uap)
 {
     return 0;
 }
@@ -83,7 +85,7 @@ struct cpuset_set_memory_affinity_args {
 };
 #endif
 int 
-cpuset_set_memory_affinity(struct cputset_set_memory_affinity_args *uap)
+sys_cpuset_set_memory_affinity(struct thread *td, struct cputset_set_memory_affinity_args *uap)
 {
     return 0;
 }
@@ -116,7 +118,8 @@ struct move_pages_args{
 };
 #endif
 
-int move_pages(struct move_ages_args *uap)
+int 
+sys_move_pages(struct thread *td, struct move_ages_args *uap)
 {
     return 0;
 }
@@ -142,7 +145,7 @@ struct migrate_pages_args {
 #endif
 
 int
-migrate_pages(struct migrate_pages_args *uap)
+sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap)
 {
     return 0;
 }
@@ -166,7 +169,7 @@ struct get_numa_cpus_args{
 	
 
 size_t 
-get_numa_cpus(struct get_numa_cpus_args *uap)
+sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap)
 {
     return 0;
 }
@@ -190,7 +193,7 @@ struct get_numa_weights_args {
 };
 #endif
 size_t 
-get_numa_weights(struct get_numa_weights_args *uap)
+sys_get_numa_weights(struct thread *td, struct get_numa_weights_args *uap)
 {
     return 0;
 }
