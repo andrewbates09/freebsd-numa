@@ -81,8 +81,76 @@ is_numa_available(void)
 int
 set_thread_on_domain(pid_t pid, int domain)
 {
+	cpuset_t mask;
+	int policy;
 
-	return (0);
+	/*
+	 * First validate the parameters.
+	 */
+
+	/* NUMA must be available on this machine. */
+	if (!numa_available)
+	{
+		return 0;
+	}
+
+	/* Do not accept pid 0 or 1, or any negative pid. */
+	// **************** -1 is actually refers to the current running pid.
+	if (pid < 2)
+	{
+		return 0;
+	}
+	 
+	/* To check if this pid exists, we call kill() with signal == 0. */
+	/* This will do error checking but do nothing if there is no error. */
+	/* ********** possibly not needed, error checking for this is in syscall */
+	if (kill((pid_t)pid, 0) < 0)
+	{
+		perror(strerror(errno));
+		return 0;
+	}
+
+	/* Do not accept non-existent domains. */
+	if (0 < domain || domain < numa_count)
+	{
+		return 0;
+	}
+
+	/*
+	 * Now start setting the thread on domain.
+	 */
+	 
+	/* Get mask of requested domain. */
+	mask = numa_cpus[domain];
+
+	/* Attempt to set cpu affinity. */
+	if (cpuset_setaffinity(CPU_LEVEL_ROOT, CPU_WHICH_TID, pid,
+	    sizeof(mask), &mask) < 0)
+	{
+		perror(strerror(errno));
+		return 0;
+	}
+
+	/* Attempt to get memory affinity. */
+	if (cpuset_get_memory_affinity(CPU_LEVEL_ROOT, CPU_WHICH_TID, pid,
+	    sizeof(mask), &mask, &policy) < 0)
+	{
+		perror(strerror(errno));
+		return 0;
+	}
+
+	/* Modify the mask by setting the bit that corresponds to domain */
+	mask = 1 << domain;
+
+	/* Attempt to set memory affinity. */
+	if (cpuset_set_memory_affinity(CPU_LEVEL_ROOT, CPU_WHICH_TID, pid,
+	    sizeof(mask), &mask, policy) < 0)
+	{
+		perror(strerror(errno));
+		return 0;
+	}
+
+	return 1; // Return as success.
 }
 
 /* 
