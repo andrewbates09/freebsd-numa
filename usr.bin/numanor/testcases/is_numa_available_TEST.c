@@ -1,8 +1,8 @@
 /*
  * is_numa_available(): TESTS
  * 
- * Last edited: February 10, 2014
- * By: Andrew Bates
+ * Last edited: March 01, 2014
+ * By: NUMAnor
  */
 
 /* ****** SUBJECT FUNCTION DESCRIPTION ******
