@@ -1,3 +1,31 @@
+/*-
+ * Copyright (c) 2014 EMC Corporation 
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ *
+ * $FreeBSD$
+ */
+
 /*
  * FreeBSD NUMA project
  * The goal of this project is to develop an interface to allow NUMA aware
@@ -7,17 +35,37 @@
  * based on this information. The indicated APIs should support thread level
  * NUMA domain affinity.
  * 
- * Last Edited: February 08, 2014
+ * Last Edited: December 03, 2013
  */
+
+
+#ifndef __FREEBSDNUMA_H__
+#define __FREEBSDNUMA_H__
 
 
 /* ----------- INCLUDES ----------- */
 
-#include <sys/freebsdnuma.h>
+#include <sys/cpuset.h>
 
 
 /* ---------- DEFINITIONS --------- */
 
+/* NEAREST: The kernel will default to allocating memory in the nearest
+ *      specified nodes.
+ * INTERLEAVE: The kernel will default to allocating memory evenly across 
+ *      the specified nodes.
+ * Summary: The NUMA policy tells the kernel how to allocate memory for an
+ *      object.
+ */
+#define NUMA_POLICY_NEAREST     1
+#define NUMA_POLICY_INTERLEAVE  2
+
+/* NUMA_MOVE: Move all pages not including ones shared with other processes.
+ * NUMA_MOVE_ALL: Moves all pages including ones shared with other processes.
+ * Summary: The NUMA move flag is used to specify the behaviour of move_pages().
+ */
+#define NUMA_MOVE       1
+#define NUMA_MOVE_ALL   2
 
 
 /* ------- SYSCALL INTERFACE ------ */
@@ -40,11 +88,12 @@
  *      stored in the space provided by mask. Also retrieves the memory
  *      allocation policy of the specified object and stores the value in policy
  */
-int cpuset_get_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
-                               size_t setsize, cpuset_t *mask, int *policy)
-{
-    return 0;
-}
+int cpuset_get_memory_affinity(cpulevel_t level,
+                               cpuwhich_t which,
+                               id_t id,
+                               size_t setsize,
+                               cpuset_t *mask,
+                               int *policy);
 
 /* Function: cpuset_set_memory_affinity()
  * Input:
@@ -61,11 +110,12 @@ int cpuset_get_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
  * Summary: Sets the memory affinity and allocation policy of the object
  *      specified by level,which and id to the value stored in mask and policy.
  */
-int cpuset_set_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
-                               size_t setsize, const cpuset_t *mask, int policy)
-{
-    return 0;
-}
+int cpuset_set_memory_affinity(cpulevel_t level,
+                               cpuwhich_t which,
+                               id_t id,
+                               size_t setsize,
+                               const cpuset_t *mask,
+                               int policy);
 
 /* Function: move_pages()
  * Input:
@@ -87,10 +137,7 @@ int move_pages(int pid,
                void **pages,
                const int *node,
                int *status,
-               int move_flag)
-{
-    return 0;
-}
+               int move_flag);
 
 /* Function: migrate_pages()
  * Input:
@@ -103,12 +150,11 @@ int move_pages(int pid,
  * Summary: Attempts to move all pages of a process in specified nodes to
  *      specified new NUMA nodes.
  */
-int migrate_pages(int pid, unsigned long maxnode,
-                 const unsigned long *old_nodes, const unsigned long *new_nodes)
-{
-    return 0;
-}
- 
+int migrate_pages(int pid,
+                  unsigned long maxnode,
+                  const unsigned long *old_nodes,
+                  const unsigned long *new_nodes);
+
 /* Function: get_numa_cpus()
  * Input:
  *      cpuset_t *buff: An array to be filled with cpusets.
@@ -119,10 +165,8 @@ int migrate_pages(int pid, unsigned long maxnode,
  * Summary: Allows processes to know what cpus belong to each NUMA node. This is
  *      useful in assigning memory affinity and policies. 
  */
-size_t get_numa_cpus(cpuset_t *buff, size_t length)
-{
-    return 0;
-}
+size_t get_numa_cpus(cpuset_t *buff,
+                     size_t length);
 
 /* Function: get_numa_weights()
  * Input:
@@ -136,7 +180,8 @@ size_t get_numa_cpus(cpuset_t *buff, size_t length)
  *      Weight between two NUMA nodes can be found by accessing the value at
  *      buff[a][b] where a and b are memory node IDs.
  */
-size_t get_numa_weights(short *buff, size_t length)
-{
-    return 0;
-}
+size_t get_numa_weights(short *buff,
+                        size_t length);
+
+
+#endif /* __FREEBSDNUMA_H__ */
