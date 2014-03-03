@@ -51,7 +51,7 @@
 /* ---------- USERSPACE LIBRARY --- */
 
 /* 
- * Function: is_numa_availiable()
+ * Function: initialize_numa()
  * Input: void
  * Output: Returns 0 if NUMA is not available, otherwise returns the number of
  *      NUMA nodes as integer.
@@ -63,10 +63,32 @@
  *      nodes available.
  */
 int
-is_numa_available(void)
+initialize_numa(void)
 {
-
-	return (0);
+	size_t numb_cpus = 0;
+	size_t numb_nodes = 0;
+	
+	cpuset_t *abuff = NULL;
+	size_t bufflen = 0;
+	
+	// generate total number of cpus
+	numb_cpus = get_numa_cpus(abuff, bufflen);
+	
+	if (numb_cpus == 1)
+	{
+		return (numb_nodes);
+	}
+	else
+	{
+		// we needed to extend all this very much
+		// overhaul to make sense
+		
+		//numa_count = numb_cpus;
+		//*numa_cpus;
+		//*numa_weights;
+		
+		return (numb_nodes);
+	}
 }
 
 /* 
