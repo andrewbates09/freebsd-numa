@@ -1,5 +1,5 @@
 /*
- * is_numa_available(): TESTS
+ * initialize_numa(): TESTS
  * 
  * Last edited: March 01, 2014
  * By: NUMAnor
@@ -21,7 +21,7 @@
  * 	use the following functions. The integer returned is the number of NUMA
  * 	nodes available.
  *	N
- * Prototype: int is_numa_available(void);
+ * Prototype: int initialize_numa(void);
  */
 
 /* ****** SUBJECT FUNCTION DEPENDANCIES ******
@@ -40,7 +40,7 @@
 
 /* ---------- TEST PROTOTYPES ----- */
 
-int test_is_numa_available(void);
+int test_initialize_numa(void);
 void tina_run_test(int result, char *testname);
 
 int tina_no_numa_available(void);
@@ -58,7 +58,7 @@ int tina_numa_available(void);
  * 	tests.
  */
 int
-test_is_numa_available(void)
+test_initialize_numa(void)
 {
 	int pfail = 0;
 	pfail += tina_run_test(tina_no_numa_available(), "tina_no_numa_avail" );

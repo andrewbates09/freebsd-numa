@@ -51,7 +51,7 @@
 /* ---------- USERSPACE LIBRARY --- */
 
 /* 
- * Function: is_numa_availiable()
+ * Function: initialize_numa()
  * Input: void
  * Output: Returns 0 if NUMA is not available, otherwise returns the number of
  *      NUMA nodes as integer.
@@ -63,7 +63,7 @@
  *      nodes available.
  */
 int
-is_numa_available(void)
+initialize_numa(void)
 {
 
 	return (0);

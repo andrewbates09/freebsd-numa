@@ -55,7 +55,7 @@
  *      NUMA CPUs. See get_numa_cpus() in freebsdnuma.h.
  * numa_weights: A 2 dimensional array of shorts to store weights. See
  *      get_numa_weights() in freebsdnuma.h.
- * Summary: The NUMA count, cpus, and weight will be set by is_numa_available()
+ * Summary: The NUMA count, cpus, and weight will be set by initialize_numa()
  *      and are available for other userspace functions.
  */
 extern size_t numa_count;
@@ -75,7 +75,7 @@ extern uint16_t *numa_weights;
 /* ---------- USERSPACE LIBRARY --- */
 
 /* 
- * Function: is_numa_availiable()
+ * Function: initialize_numa()
  * Input: void
  * Output: Returns 0 if NUMA is not available, otherwise returns the number of
  *      NUMA nodes as integer.
@@ -86,7 +86,7 @@ extern uint16_t *numa_weights;
  *      use the following functions. The integer returned is the number of NUMA
  *      nodes available.
  */
-int is_numa_available(void);
+int initialize_numa(void);
 
 /* 
  * Function: set_thread_on_domain()
