@@ -12,21 +12,40 @@
 
 
 /* ----------- INCLUDES ----------- */
+#include <sys/cdefs.h>
 
-#include <sys/freebsdnuma.h>
 #include <sys/param.h>
 #include <sys/systm.h>
 #include <sys/sysproto.h>
+#include <sys/jail.h>
+#include <sys/kernel.h>
+#include <sys/lock.h>
+#include <sys/malloc.h>
+#include <sys/mutex.h>
+#include <sys/priv.h>
+#include <sys/proc.h>
+#include <sys/refcount.h>
+#include <sys/sched.h>
+#include <sys/smp.h>
+#include <sys/syscallsubr.h>
+#include <sys/cpuset.h>
+#include <sys/sx.h>
+#include <sys/queue.h>
+#include <sys/libkern.h>
+#include <sys/limits.h>
+#include <sys/bus.h>
+
+#include <sys/freebsdnuma.h>
 
 
 /* ---------- DEFINITIONS --------- */
 
-int sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affinity_args *uap);
-int sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affinity_args *uap);
-int sys_move_pages(struct thread *td, struct move_pages_args *uap);
-int sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap);
-size_t sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap);
-size_t sys_get_numa_weights(struct thread *td, struct get_numa_weights_args *uap);
+//int sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affinity_args *uap);
+//int sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affinity_args *uap);
+//int sys_move_pages(struct thread *td, struct move_pages_args *uap);
+//int sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap);
+//size_t sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap);
+//size_t sys_get_numa_weights(struct thread *td, struct get_numa_weights_args *uap);
 
 
 /* ------- SYSCALL INTERFACE ------ */
@@ -125,7 +144,7 @@ sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap)
  * Summary: Allows processes to know what cpus belong to each NUMA node. This is
  *      useful in assigning memory affinity and policies. 
  */
-size_t 
+int 
 sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap)
 {
     return 0;
@@ -143,7 +162,7 @@ sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap)
  *      Weight between two NUMA nodes can be found by accessing the value at
  *      buff[a][b] where a and b are memory node IDs.
  */
-size_t 
+int
 sys_get_numa_weights(struct thread *td, struct get_numa_weights_args *uap)
 {
     return 0;

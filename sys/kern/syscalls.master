@@ -995,9 +995,9 @@
 				    unsigned long maxnode, \
 				    const unsigned long *old_nodes, \
 				    const unsigned long *new_nodes); }
-549	AUE_NULL	STD	{ size_t get_numa_cpus(cpuset_t *buff, \
+549	AUE_NULL	STD	{ int get_numa_cpus(cpuset_t *buff, \
 				    size_t length); }
-550	AUE_NULL	STD	{ size_t get_numa_weights(short *buff, \
+550	AUE_NULL	STD	{ int get_numa_weights(short *buff, \
 				    size_t length); }
 ; Please copy any additions and changes to the following compatability tables:
 ; sys/compat/freebsd32/syscalls.master

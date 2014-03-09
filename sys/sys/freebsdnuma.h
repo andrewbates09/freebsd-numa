@@ -139,7 +139,7 @@ int migrate_pages(int pid,
  * Summary: Allows processes to know what cpus belong to each NUMA node. This is
  *      useful in assigning memory affinity and policies. 
  */
-size_t get_numa_cpus(cpuset_t *buff,
+int get_numa_cpus(cpuset_t *buff,
                      size_t length);
 
 /* Function: get_numa_weights()
@@ -154,7 +154,7 @@ size_t get_numa_cpus(cpuset_t *buff,
  *      Weight between two NUMA nodes can be found by accessing the value at
  *      buff[a][b] where a and b are memory node IDs.
  */
-size_t get_numa_weights(short *buff,
+int get_numa_weights(short *buff,
                         size_t length);
 
 
