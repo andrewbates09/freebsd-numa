@@ -18,8 +18,15 @@
 #include <sys/systm.h>
 #include <sys/sysproto.h>
 
+
 /* ---------- DEFINITIONS --------- */
 
+int sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affinity_args *uap);
+int sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affinity_args *uap);
+int sys_move_pages(struct thread *td, struct move_pages_args *uap);
+int sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap);
+size_t sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap);
+size_t sys_get_numa_weights(struct thread *td, struct get_numa_weights_args *uap);
 
 
 /* ------- SYSCALL INTERFACE ------ */
@@ -42,16 +49,6 @@
  *      stored in the space provided by mask. Also retrieves the memory
  *      allocation policy of the specified object and stores the value in policy
  */
-#ifndef _SYS_SYSPROTO_H_
-struct cpuset_get_memory_affinity_args {
-	cpulevel_t	level;
-	cpuwhich_t	which;
-	id_t		id;
-	size_t		setsize;
-	cpuset_t	*mask;
-	int		*policy;
-};
-#endif
 int 
 sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affinity_args *uap)
 {
@@ -73,17 +70,6 @@ sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affin
  * Summary: Sets the memory affinity and allocation policy of the object
  *      specified by level,which and id to the value stored in mask and policy.
  */
-
-#ifndef _SYS_SYSPROTO_H_
-struct cpuset_set_memory_affinity_args {
-	cpulevel_t	level;
-	cpuwhich_t	which;
-	id_t		id;
-	size_t		setsize;
-	cpuset_t	*mask;
-	int		policy;
-};
-#endif
 int 
 sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affinity_args *uap)
 {
@@ -106,20 +92,8 @@ sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affin
  * Output: Returns 0 for success.  Returns -1 for failure.
  * Summary: Used to move specific pages on specified nodes to new NUMA nodes.
  */
-
-#ifndef _SYS_SYSPROTO_H_
-struct move_pages_args{
-	int pid;
-	unsigned long count;
-	void **pages;
-	const int *node;
-	int *status;
-	int move_flag;
-};
-#endif
-
 int 
-sys_move_pages(struct thread *td, struct move_ages_args *uap)
+sys_move_pages(struct thread *td, struct move_pages_args *uap)
 {
     return 0;
 }
@@ -135,15 +109,6 @@ sys_move_pages(struct thread *td, struct move_ages_args *uap)
  * Summary: Attempts to move all pages of a process in specified nodes to
  *      specified new NUMA nodes.
  */
-#ifndef _SYS_SYSPROTO_H_
-struct migrate_pages_args {
-	int 	pid;
-	unsigned long 	maxnode;
-	const unsigned long 	*oldnodes;
-	const unsigned long	*new_nodes;
-};
-#endif
-
 int
 sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap)
 {
@@ -160,14 +125,6 @@ sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap)
  * Summary: Allows processes to know what cpus belong to each NUMA node. This is
  *      useful in assigning memory affinity and policies. 
  */
-#ifndef _SYS_SYSPROTO_H_
-struct get_numa_cpus_args{
-	cpuset_t	*buff;
-	size_t	length;
-};
-#endif
-	
-
 size_t 
 sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap)
 {
@@ -186,12 +143,6 @@ sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap)
  *      Weight between two NUMA nodes can be found by accessing the value at
  *      buff[a][b] where a and b are memory node IDs.
  */
-#ifndef _SYS_SYSPROTO_H_
-struct get_numa_weights_args {
-	short	*buff;
-	size_t	length;
-};
-#endif
 size_t 
 sys_get_numa_weights(struct thread *td, struct get_numa_weights_args *uap)
 {

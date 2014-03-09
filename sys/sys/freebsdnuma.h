@@ -18,6 +18,8 @@
 /* ----------- INCLUDES ----------- */
 
 #include <sys/cpuset.h>
+#include <sys/param.h>
+#include <sys/systm.h>
 
 
 /* ---------- DEFINITIONS --------- */
