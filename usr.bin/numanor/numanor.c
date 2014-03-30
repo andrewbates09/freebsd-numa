@@ -53,8 +53,8 @@
 /* 
  * Function: initialize_numa()
  * Input: void
- * Output: Returns 0 if NUMA is not available, otherwise returns the number of
- *      NUMA nodes as integer.
+ * Output: Returns 1 if NUMA is not available, since there should be at least 1
+ *	cpu, otherwise returns the number of NUMA nodes as integer.
  * Summary: If this function evaluates as true (1-n nodes), the current machine
  *      is found to have NUMA architecture, and the functions included below
  *      should be available.  If this evaluates to false (0), the current 
@@ -65,8 +65,8 @@
 int
 initialize_numa(void)
 {
-	size_t numb_cpus = 0;
-	size_t numb_nodes = 0;
+	size_t numb_cpus = 1;
+	size_t numb_nodes = 1;
 	
 	cpuset_t *abuff = NULL;
 	size_t bufflen = 0;
@@ -80,8 +80,9 @@ initialize_numa(void)
 	}
 	else
 	{
-		// we needed to extend all this very much
-		// overhaul to make sense
+		// we needed to extend all this very much to make sense
+		
+		// CPUS!= ${SYSCTL} -n kern.smp.cpus
 		
 		//numa_count = numb_cpus;
 		//*numa_cpus;
