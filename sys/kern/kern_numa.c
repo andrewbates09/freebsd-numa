@@ -40,13 +40,6 @@
 
 /* ---------- DEFINITIONS --------- */
 
-//int sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affinity_args *uap);
-//int sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affinity_args *uap);
-//int sys_move_pages(struct thread *td, struct move_pages_args *uap);
-//int sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap);
-//size_t sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap);
-//size_t sys_get_numa_weights(struct thread *td, struct get_numa_weights_args *uap);
-
 
 /* ------- SYSCALL INTERFACE ------ */
 
@@ -68,13 +61,8 @@
  *      stored in the space provided by mask. Also retrieves the memory
  *      allocation policy of the specified object and stores the value in policy
  */
-<<<<<<< HEAD:sys/kern/kern_numa.c
 int 
 sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affinity_args *uap)
-=======
-int cpuset_get_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
-                               size_t setsize, cpuset_t *mask, int *policy)
->>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
@@ -94,13 +82,8 @@ int cpuset_get_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
  * Summary: Sets the memory affinity and allocation policy of the object
  *      specified by level,which and id to the value stored in mask and policy.
  */
-<<<<<<< HEAD:sys/kern/kern_numa.c
 int 
 sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affinity_args *uap)
-=======
-int cpuset_set_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
-                               size_t setsize, const cpuset_t *mask, int policy)
->>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
@@ -121,17 +104,8 @@ int cpuset_set_memory_affinity(cpulevel_t level, cpuwhich_t which, id_t id,
  * Output: Returns 0 for success.  Returns -1 for failure.
  * Summary: Used to move specific pages on specified nodes to new NUMA nodes.
  */
-<<<<<<< HEAD:sys/kern/kern_numa.c
 int 
 sys_move_pages(struct thread *td, struct move_pages_args *uap)
-=======
-int move_pages(int pid,
-               unsigned long count,
-               void **pages,
-               const int *node,
-               int *status,
-               int move_flag)
->>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
@@ -147,13 +121,8 @@ int move_pages(int pid,
  * Summary: Attempts to move all pages of a process in specified nodes to
  *      specified new NUMA nodes.
  */
-<<<<<<< HEAD:sys/kern/kern_numa.c
 int
 sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap)
-=======
-int migrate_pages(int pid, unsigned long maxnode,
-                 const unsigned long *old_nodes, const unsigned long *new_nodes)
->>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
@@ -168,12 +137,8 @@ int migrate_pages(int pid, unsigned long maxnode,
  * Summary: Allows processes to know what cpus belong to each NUMA node. This is
  *      useful in assigning memory affinity and policies. 
  */
-<<<<<<< HEAD:sys/kern/kern_numa.c
 int 
 sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap)
-=======
-size_t get_numa_cpus(cpuset_t *buff, size_t length)
->>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
@@ -190,12 +155,8 @@ size_t get_numa_cpus(cpuset_t *buff, size_t length)
  *      Weight between two NUMA nodes can be found by accessing the value at
  *      buff[a][b] where a and b are memory node IDs.
  */
-<<<<<<< HEAD:sys/kern/kern_numa.c
 int
 sys_get_numa_weights(struct thread *td, struct get_numa_weights_args *uap)
-=======
-size_t get_numa_weights(short *buff, size_t length)
->>>>>>> moving stuff around, syscall stubs might work now:sys/kern/kern_numa.c
 {
     return 0;
 }
