@@ -64,6 +64,34 @@
 int 
 sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affinity_args *uap)
 {
+    struct cpuset_get_memory_affinity_args * argsptr;
+    unsigned long bytes_not_copied;
+
+    //get args from userspace
+    argsptr = (*cpuset_get_memory_affinity_args) kmalloc(sizeof(cpuset_get_memory_affinity_args));
+    bytes_not_copied = copy_from_user(argsptr,uap,sizeof(cpuset_get_memory_affinity_args));
+    
+    //check to make sure we got everything
+    if (bytes_not_copied > 0)
+    {
+        //some bytes weren't copied, bail
+        return 89;
+    }
+
+    //data validation for cpulevel_t
+    if ((argsptr->level > 3) || (argsptr->cpulevel < 1))
+    {
+        //invalid level; return errno 33
+        return 33;
+    }
+
+    //data validation for cpuwhich_t
+    if ((argsptr->cpuwhich > 5) || (argsptr->cpuwhich < 1))
+    {
+        //invalid which; return errno 33
+        return 33;
+    }
+
     return 0;
 }
 
@@ -85,6 +113,33 @@ sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affin
 int 
 sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affinity_args *uap)
 {
+    struct cpuset_set_memory_affinity_args * argsptr;
+    unsigned long bytes_not_copied;
+    //get args from userspace
+    argsptr = (*cpuset_set_memory_affinity_args) kmalloc(sizeof(cpuset_set_memory_affinity_args));
+    bytes_not_copied = copy_from_user(argsptr,uap,sizeof(cpuset_set_memory_affinity_args));
+    
+    //check to make sure we got everything
+    if (bytes_not_copied > 0)
+    {
+        //some bytes weren't copied, bail
+        return 89;
+    }
+
+    //data validation for cpulevel_t
+    if ((argsptr->level > 3) || (argsptr->cpulevel < 1))
+    {
+        //invalid level; return errno 33
+        return 33;
+    }
+
+    //data validation for cpuwhich_t
+    if ((argsptr->cpuwhich > 5) || (argsptr->cpuwhich < 1))
+    {
+        //invalid which; return errno 33
+        return 33;
+    }
+
     return 0;
 }
 
