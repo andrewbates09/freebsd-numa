@@ -14,6 +14,8 @@
 /* ----------- INCLUDES ----------- */
 #include <sys/cdefs.h>
 
+#include <asm/uaccess.h>
+#include <sys/types.h>
 #include <sys/param.h>
 #include <sys/systm.h>
 #include <sys/sysproto.h>
@@ -213,5 +215,42 @@ sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap)
 int
 sys_get_numa_weights(struct thread *td, struct get_numa_weights_args *uap)
 {
-    return 0;
+	int fail;
+	short *domain_map;
+	if(uap->length < vm_ndomains * vm_ndomains)
+	{
+		// Not enough space
+		return (vm_ndomains);
+	}
+
+	domain_map = (*short)kmalloc(sizeof(short) * vm_domains * vm_domains);
+
+	if(!domain_map) // Cannot allocate memory
+	{
+		return (vm_ndomains);
+	}
+
+	for(int i = 0; i < vm_ndomains; i++)
+	{
+		for(int j = 0, j < vm_ndomains, j++)
+		{
+			// Fill with sample data	
+			if(i == j)
+			{
+				domain_map[i][j] = 0;
+			}
+			else
+			{
+				domain_map[i][j] = 1;
+			}
+		}
+	}
+	
+	// Copy memory to userspace
+	fail = copy_to_user(uap->buff, domain_map, sizeof(short) * vm_domains * vm_domains);
+
+	// if(fail) // unable to copy to userspace
+	free(domain_map);
+
+	return (vm_ndomains);
 }
