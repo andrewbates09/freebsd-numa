@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2014 EMC Corporation 
+ * Copyright (c) 2014 EMC Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,7 @@
  * userspace and modifying the memory allocator to make allocation decisions
  * based on this information. The indicated APIs should support thread level
  * NUMA domain affinity.
- * 
+ *
  * Last Edited: December 03, 2013
  */
 
@@ -54,7 +54,7 @@
 
 /* NEAREST: The kernel will default to allocating memory in the nearest
  *      specified nodes.
- * INTERLEAVE: The kernel will default to allocating memory evenly across 
+ * INTERLEAVE: The kernel will default to allocating memory evenly across
  *      the specified nodes.
  * Summary: The NUMA policy tells the kernel how to allocate memory for an
  *      object.
@@ -165,7 +165,7 @@ int migrate_pages(int pid,
  *      cpusets. Passing a null buff and length of 0 will simply return the
  *      count of NUMA nodes.
  * Summary: Allows processes to know what cpus belong to each NUMA node. This is
- *      useful in assigning memory affinity and policies. 
+ *      useful in assigning memory affinity and policies.
  */
 int get_numa_cpus(cpuset_t *buff,
                      size_t length);
@@ -178,7 +178,7 @@ int get_numa_cpus(cpuset_t *buff,
  * Output: Returns the count of NUMA nodes and fills buff with a 2 dimensional
  *      array of weights between NUMA nodes. Passing a null buff and length of 0
  *      will simply return the count of NUMA nodes.
- * Summary: Allows processes to know about relative latency between NUMA nodes. 
+ * Summary: Allows processes to know about relative latency between NUMA nodes.
  *      Weight between two NUMA nodes can be found by accessing the value at
  *      buff[a][b] where a and b are memory node IDs.
  */
