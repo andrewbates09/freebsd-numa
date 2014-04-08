@@ -6,7 +6,7 @@
  * userspace and modifying the memory allocator to make allocation decisions
  * based on this information. The indicated APIs should support thread level
  * NUMA domain affinity.
- * 
+ *
  * Last Edited: February 08, 2014
  */
 
@@ -39,6 +39,8 @@
 
 #include <sys/freebsdnuma.h>
 
+#include <errno.h>
+
 
 /* ---------- DEFINITIONS --------- */
 
@@ -63,38 +65,29 @@
  *      stored in the space provided by mask. Also retrieves the memory
  *      allocation policy of the specified object and stores the value in policy
  */
-int 
+int
 sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affinity_args *uap)
 {
-    struct cpuset_get_memory_affinity_args * argsptr;
-    unsigned long bytes_not_copied;
+	struct cpuset_get_memory_affinity_args * argsptr;
+	unsigned long bytes_not_copied;
 
-    //get args from userspace
-    argsptr = (*cpuset_get_memory_affinity_args) kmalloc(sizeof(cpuset_get_memory_affinity_args));
-    bytes_not_copied = copy_from_user(argsptr,uap,sizeof(cpuset_get_memory_affinity_args));
-    
-    //check to make sure we got everything
-    if (bytes_not_copied > 0)
-    {
-        //some bytes weren't copied, bail
-        return 89;
-    }
+	/* get args from userspace */
+	argsptr = (*cpuset_get_memory_affinity_args) kmalloc(sizeof(cpuset_get_memory_affinity_args));
+	bytes_not_copied = copy_from_user(argsptr,uap,sizeof(cpuset_get_memory_affinity_args));
 
-    //data validation for cpulevel_t
-    if ((argsptr->level > 3) || (argsptr->cpulevel < 1))
-    {
-        //invalid level; return errno 33
-        return 33;
-    }
+	/* check to make sure we got everything */
+	if (bytes_not_copied > 0)
+		return (EBADMSG);
 
-    //data validation for cpuwhich_t
-    if ((argsptr->cpuwhich > 5) || (argsptr->cpuwhich < 1))
-    {
-        //invalid which; return errno 33
-        return 33;
-    }
+	/* data validation for cpulevel_t */
+	if ((argsptr->level > 3) || (argsptr->cpulevel < 1))
+		return (EDOM);
 
-    return 0;
+	/* data validation for cpuwhich_t */
+	if ((argsptr->cpuwhich > 5) || (argsptr->cpuwhich < 1))
+		return (EDOM);
+
+	return (0);
 }
 
 /* Function: cpuset_set_memory_affinity()
@@ -112,37 +105,28 @@ sys_cpuset_get_memory_affinity(struct thread *td, struct cpuset_get_memory_affin
  * Summary: Sets the memory affinity and allocation policy of the object
  *      specified by level,which and id to the value stored in mask and policy.
  */
-int 
+int
 sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affinity_args *uap)
 {
-    struct cpuset_set_memory_affinity_args * argsptr;
-    unsigned long bytes_not_copied;
-    //get args from userspace
-    argsptr = (*cpuset_set_memory_affinity_args) kmalloc(sizeof(cpuset_set_memory_affinity_args));
-    bytes_not_copied = copy_from_user(argsptr,uap,sizeof(cpuset_set_memory_affinity_args));
-    
-    //check to make sure we got everything
-    if (bytes_not_copied > 0)
-    {
-        //some bytes weren't copied, bail
-        return 89;
-    }
+	struct cpuset_set_memory_affinity_args * argsptr;
+	unsigned long bytes_not_copied;
+	/* get args from userspace */
+	argsptr = (*cpuset_set_memory_affinity_args) kmalloc(sizeof(cpuset_set_memory_affinity_args));
+	bytes_not_copied = copy_from_user(argsptr,uap,sizeof(cpuset_set_memory_affinity_args));
 
-    //data validation for cpulevel_t
-    if ((argsptr->level > 3) || (argsptr->cpulevel < 1))
-    {
-        //invalid level; return errno 33
-        return 33;
-    }
+	/* check to make sure we got everything */
+	if (bytes_not_copied > 0)
+		return (EBADMSG);
 
-    //data validation for cpuwhich_t
-    if ((argsptr->cpuwhich > 5) || (argsptr->cpuwhich < 1))
-    {
-        //invalid which; return errno 33
-        return 33;
-    }
+	/* data validation for cpulevel_t */
+	if ((argsptr->level > 3) || (argsptr->cpulevel < 1))
+		return (EDOM);
 
-    return 0;
+	/* data validation for cpuwhich_t */
+	if ((argsptr->cpuwhich > 5) || (argsptr->cpuwhich < 1))
+		return (EDOM);
+
+	return (0);
 }
 
 
@@ -161,10 +145,11 @@ sys_cpuset_set_memory_affinity(struct thread *td, struct cpuset_set_memory_affin
  * Output: Returns 0 for success.  Returns -1 for failure.
  * Summary: Used to move specific pages on specified nodes to new NUMA nodes.
  */
-int 
+int
 sys_move_pages(struct thread *td, struct move_pages_args *uap)
 {
-    return 0;
+
+	return (ENOSYS);
 }
 
 /* Function: migrate_pages()
@@ -181,9 +166,10 @@ sys_move_pages(struct thread *td, struct move_pages_args *uap)
 int
 sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap)
 {
-    return 0;
+
+	return (ENOSYS);
 }
- 
+
 /* Function: get_numa_cpus()
  * Input:
  *      cpuset_t *buff: An array to be filled with cpusets.
@@ -192,12 +178,13 @@ sys_migrate_pages(struct thread *td, struct migrate_pages_args *uap)
  *      cpusets. Passing a null buff and length of 0 will simply return the
  *      count of NUMA nodes.
  * Summary: Allows processes to know what cpus belong to each NUMA node. This is
- *      useful in assigning memory affinity and policies. 
+ *      useful in assigning memory affinity and policies.
  */
-int 
+int
 sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap)
 {
-    return 0;
+
+	return (ENOSYS);
 }
 
 /* Function: get_numa_weights()
@@ -208,48 +195,43 @@ sys_get_numa_cpus(struct thread *td, struct get_numa_cpus_args *uap)
  * Output: Returns the count of NUMA nodes and fills buff with a 2 dimensional
  *      array of weights between NUMA nodes. Passing a null buff and length of 0
  *      will simply return the count of NUMA nodes.
- * Summary: Allows processes to know about relative latency between NUMA nodes. 
+ * Summary: Allows processes to know about relative latency between NUMA nodes.
  *      Weight between two NUMA nodes can be found by accessing the value at
  *      buff[a][b] where a and b are memory node IDs.
  */
 int
 sys_get_numa_weights(struct thread *td, struct get_numa_weights_args *uap)
 {
-	int fail;
 	short *domain_map;
-	if(uap->length < vm_ndomains * vm_ndomains)
-	{
-		// Not enough space
+	int fail;
+
+	/* Not enough space */
+	if (uap->length < vm_ndomains * vm_ndomains)
 		return (vm_ndomains);
-	}
 
 	domain_map = (*short)kmalloc(sizeof(short) * vm_domains * vm_domains);
 
-	if(!domain_map) // Cannot allocate memory
-	{
+	if (!domain_map)
 		return (vm_ndomains);
-	}
 
-	for(int i = 0; i < vm_ndomains; i++)
-	{
-		for(int j = 0, j < vm_ndomains, j++)
-		{
-			// Fill with sample data	
-			if(i == j)
-			{
+	/* Convert to queue(9) */
+	for (i = 0; i < vm_ndomains; i++) {
+		for (j = 0; j < vm_ndomains; j++) {
+			/* Fill with sample data */
+			if (i == j)
 				domain_map[i][j] = 0;
-			}
 			else
-			{
 				domain_map[i][j] = 1;
-			}
 		}
 	}
-	
-	// Copy memory to userspace
-	fail = copy_to_user(uap->buff, domain_map, sizeof(short) * vm_domains * vm_domains);
 
-	// if(fail) // unable to copy to userspace
+	/* Copy memory to userspace */
+	fail = copy_to_user(uap->buff, domain_map,
+			    sizeof(short) * vm_domains * vm_domains);
+
+#if 0
+	if(fail) /* unable to copy to userspace */
+#endif
 	free(domain_map);
 
 	return (vm_ndomains);
